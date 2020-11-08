@@ -24,7 +24,7 @@ export default {
     methods:{
         async NavInit() {
             if(localStorage.getItem('token')){
-            const res = await this.$http.get('/user/' + localStorage.getItem('id'))
+            const res = await this.$http.get('/user/' + localStorage.getItem('username'))
             this.imgUrl = res.data[0].user_img
             }
         }

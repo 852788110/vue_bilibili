@@ -24,7 +24,7 @@ export default {
     },
     methods:{
         async userData() {
-            const res =  await this.$http.get('/user/' + localStorage.getItem('id'))
+            const res =  await this.$http.get('/user/info/')
             this.model = res.data[0]    
         }
     },
