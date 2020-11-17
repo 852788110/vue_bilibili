@@ -3,7 +3,7 @@
       <div>
           <span>动态</span>
           <span>视频</span>
-          <span>历史</span>
+          <span @click="getHistory">历史</span>
       </div>
       <div></div>
   </div>

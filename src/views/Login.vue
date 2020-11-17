@@ -44,14 +44,15 @@ export default {
       if (rulg.test(this.model.username) && rulg.test(this.model.password)) {
         const res = await this.$http.post('/admin/login', this.model)
         this.$msg.fail(res.data.msg)
-        if (res.data.code == 301 || res.data.code == 302) {
+        if (res.data.code === 301 || res.data.code === 302) {
           return
         }
         localStorage.setItem('token', res.data.data.token)
         localStorage.setItem('username',res.data.data.username)
+        console.log(res);
         setTimeout(() => {
           this.$router.push('/userinfo')
-        }, 1000)
+        }, 2000)
       } else {
         this.$msg.fail('格式不正确,请重新输入!')
       }

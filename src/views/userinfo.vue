@@ -30,7 +30,6 @@ export default {
           username: localStorage.getItem('username')
         }
       })
-      console.log(res);
       this.model = res.data.data
     }
   },
