@@ -48,6 +48,7 @@ export default {
           return
         }
         localStorage.setItem('token', res.data.data.token)
+        localStorage.setItem('username',res.data.data.username)
         setTimeout(() => {
           this.$router.push('/userinfo')
         }, 1000)

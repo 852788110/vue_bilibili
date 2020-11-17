@@ -2,22 +2,24 @@
   <div class="home" v-if="category">
     <nav-bar></nav-bar>
     <div class="categorytab">
-      <div class="category-ico" @click="$router.push('/editcategory')"><van-icon name="setting-o" /></div>
+      <div class="category-ico" @click="$router.push('/editcategory')">
+        <van-icon name="setting-o"/>
+      </div>
       <van-tabs v-model="active" swipeable sticky animated>
-        <van-tab v-for="(item,index) in category" :key="index" :title="item.title">
+        <van-tab v-for="(item,index) in category" :key="index" :title="item.categoryName">
           <van-list
-            v-model="item.loading"
-            :immediate-check="false"
-            :finished="item.finished"
-            finished-text="我也是有底线的"
-            @load="onLoad"
+              v-model="item.loading"
+              :immediate-check="false"
+              :finished="item.finished"
+              finished-text="我也是有底线的"
+              @load="onLoad"
           >
             <div class="detailparent">
               <cover
-                class="detailitem"
-                :detailitem="categoryitem"
-                v-for="(categoryitem,categoryindex) in item.list"
-                :key="categoryindex"
+                  class="detailitem"
+                  :detailitem="categoryitem"
+                  v-for="(categoryitem,categoryindex) in item.list"
+                  :key="categoryindex"
               />
             </div>
           </van-list>
@@ -30,10 +32,12 @@
 <script>
 import NavBar from "@/components/common/Navbar.vue";
 import cover from "./cover";
+
 export default {
   data() {
     return {
-      category: [],
+      category: [
+      ],
       active: 0
     };
   },
@@ -42,20 +46,20 @@ export default {
     cover
   },
   activated() {
-    if(localStorage.getItem('newCat')) {
-        let newCat = JSON.parse(localStorage.getItem('newCat'))
-        this.category = this.changeCategory(newCat)
-        this.selectArticle();
+    if (localStorage.getItem('newCat')) {
+      let newCat = JSON.parse(localStorage.getItem('newCat'))
+      this.category = this.changeCategory(newCat)
+      this.selectArticle();
     }
   },
   methods: {
     async selectCategory() {
-      if(localStorage.getItem('newCat')) {
+      if (localStorage.getItem('newCat')) {
         return
       }
-      const res = await this.$http.get("/category");
-      this.category = this.changeCategory(res.data);
-      this.selectArticle();
+      const res = await this.$http.get("/category/categorys");
+      this.category = this.changeCategory(res.data.data);
+      await this.selectArticle();
     },
     changeCategory(data) {
       const category1 = data.map((item, index) => {
@@ -70,15 +74,14 @@ export default {
     },
     async selectArticle() {
       const categoryitem = this.categoryItem();
-      const res = await this.$http.get("/detail/" + categoryitem._id, {
-        params: {
-          page: categoryitem.page,
-          pagesize: categoryitem.pagesize
+      const res = await this.$http.get("/category/list",{
+        params:{
+          categoryId:categoryitem.id
         }
       });
-      categoryitem.list.push(...res.data);
+      categoryitem.list.push(...res.data.data);
       categoryitem.loading = false;
-      if (res.data.length < categoryitem.pagesize) {
+      if (res.data.data.length < categoryitem.pagesize) {
         categoryitem.finished = true;
       }
     },
@@ -112,18 +115,22 @@ export default {
 .home {
   background-color: white;
 }
+
 .detailparent {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+
   .detailitem {
     margin: 1.389vw 0;
     width: 45%;
   }
 }
-.categorytab{
+
+.categorytab {
   position: relative;
-  .category-ico{
+
+  .category-ico {
     position: absolute;
     z-index: 5;
     right: 0;
