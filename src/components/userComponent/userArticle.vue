@@ -1,31 +1,65 @@
 <template>
   <div class="user-article">
-      <div>
-          <span>动态</span>
-          <span>视频</span>
-          <span @click="getHistory">历史</span>
-      </div>
-      <div></div>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="动态" name="first">动态</el-tab-pane>
+      <el-tab-pane label="视频" name="second">视频</el-tab-pane>
+      <el-tab-pane label="历史" name="third">
+        <div class="detailparent">
+          <cover
+              class="detailitem"
+              :detailitem="categoryitem"
+              v-for="(categoryitem,categoryindex) in readHistorys"
+              :key="categoryindex"
+          />
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
-export default {
+import cover from '@/views/cover';
 
+export default {
+  data() {
+    return {
+      readHistorys: [],
+      activeName: 'second'
+    }
+  },
+  components: {
+    cover
+  },
+  methods: {
+    async getHistory() {
+
+      const res = await this.$http.get('/user/readHistory/list', {
+        params: {
+          userId: localStorage.getItem('userId')
+        }
+      })
+
+      this.readHistorys = res.data.data
+    },
+    async handleClick(tab, event) {
+      if (tab.name === 'third') {
+        if (this.readHistorys.length>0){
+          return
+        }
+        const res = await this.$http.get("/user/readHistory/list", {
+          params: {
+            userId: localStorage.getItem('userId')
+          }
+        });
+        this.readHistorys = res.data.data
+      }
+    }
+  }
 }
 </script>
 
 <style lang="less">
-.user-article{
-    display: flex;
-    align-items: center;
-    background-color: white;
-    height: 11.111vw;
-    padding: 0 2.778vw;
-    border-top: 0.278vw solid #ddd;
-    span{
-        margin: 0 1.944vw;
-        color: #777;
-    }
+.user-article {
+  background-color: white;
 }
 </style>

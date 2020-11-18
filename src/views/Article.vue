@@ -91,7 +91,7 @@ export default {
 
       // 将该视频添加到用户的浏览记录中
       this.readHistory.videoId = videoId
-      this.readHistory.user_id = localStorage.getItem('userId')
+      this.readHistory.userId = localStorage.getItem('userId')
       await this.$http.post('/user/readHistory/create', this.readHistory)
 
       this.model = res.data.data

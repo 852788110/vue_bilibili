@@ -47,12 +47,14 @@ export default {
         if (res.data.code === 301 || res.data.code === 302) {
           return
         }
+
+        console.log(res);
         localStorage.setItem('token', res.data.data.token)
         localStorage.setItem('username',res.data.data.username)
-        console.log(res);
+        localStorage.setItem('userId',res.data.data.userId)
         setTimeout(() => {
           this.$router.push('/userinfo')
-        }, 2000)
+        }, 1000)
       } else {
         this.$msg.fail('格式不正确,请重新输入!')
       }
