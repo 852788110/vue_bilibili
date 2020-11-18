@@ -44,11 +44,14 @@ export default {
       if (rulg.test(this.model.username) && rulg.test(this.model.password)) {
         const res = await this.$http.post('/admin/login', this.model)
         this.$msg.fail(res.data.msg)
-        if (res.data.code == 301 || res.data.code == 302) {
+        if (res.data.code === 301 || res.data.code === 302) {
           return
         }
+
+        console.log(res);
         localStorage.setItem('token', res.data.data.token)
         localStorage.setItem('username',res.data.data.username)
+        localStorage.setItem('userId',res.data.data.userId)
         setTimeout(() => {
           this.$router.push('/userinfo')
         }, 1000)

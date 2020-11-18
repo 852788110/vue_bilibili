@@ -64,7 +64,8 @@ export default {
       },
       collectionActive: null,
       subscritionActive: null,
-      category: ''
+      category: '',
+      readHistory: {}
     }
   },
   components: {
@@ -82,11 +83,17 @@ export default {
         }
       })
 
+      // 增加视频播放量
       let videoId = this.$route.params.id
       const params = new URLSearchParams();
       params.append('videoId', videoId)
-      const ans = await this.$http.post('/video/increment', this.$qs.stringify({'videoId':videoId}))
-      console.log(ans);
+      const ans = await this.$http.post('/video/increment', this.$qs.stringify({'videoId': videoId}))
+
+      // 将该视频添加到用户的浏览记录中
+      this.readHistory.videoId = videoId
+      this.readHistory.userId = localStorage.getItem('userId')
+      await this.$http.post('/user/readHistory/create', this.readHistory)
+
       this.model = res.data.data
       if (this.model) {
         this.subscritionInit()

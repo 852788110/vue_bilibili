@@ -60,7 +60,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if ((!localStorage.getItem('token') || !localStorage.getItem('id')) && to.meta.istoken == true) {
+    console.log(localStorage.getItem('username'));
+    if ((!localStorage.getItem('token') || !localStorage.getItem('username')) && to.meta.istoken === true) {
         router.push('/login')
         Vue.prototype.$msg.fail('请重新登录')
         return
